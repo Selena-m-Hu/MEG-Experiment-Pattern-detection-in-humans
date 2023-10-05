@@ -19,6 +19,7 @@
 %
 % Last update: 18/June/2018
 % Last update: July 2021 (Roberta Bianco)
+% updated by Mingyue Hu, 2022
 
 clc
 clear all
@@ -47,9 +48,9 @@ addpath('D:\NoiseTools');
 % We define which parts of the code should be (re)computed.
 setup.preprocessingDetrend      =   0;   % Detrending and smoothing
 setup.preprocessingMEM          =   1;   % Filtering and more (epoching etc)
-% setup.channel_selection         =   0; % Set to 1 to select automatically the optimal channels.
+setup.channel_selection         =   0; % Set to 1 to select automatically the optimal channels.
 setup.compute_DSScomputation    =   0;
-% setup.compute_ToneButterfly     =   0; % Must be performed for HP=2.
+setup.compute_ToneButterfly     =   0; % Must be performed for HP=2.
 % setup.compute_PSD               =   0;
 
 % setup.to_SPM                    =   0;
@@ -86,28 +87,28 @@ if setup.preprocessingMEM == 1
  end
 
 
-% %% Channel selection (temporal channels).
-% % Channel selection runs independently for each subject, but is obtained
-% % from the average signals of all the trigger conditions.
-% 
-% if setup.channel_selection == 1
-%     config.channel_modality = 'temporal';   % 'temporal', 'occipital', 'auto'
-%     config.plot_channels = 1;               % In this case, it would plot topography using temporal information.
-%     config.store_data = 1;
-%     config.DSS = 1;
-%     averageTrig = 1;     %1: we average the information of all triggers for channel selection
-%                          %0: we average the information of each pair of
-%                          %triggers
-%     if averageTrig
-%        trigger_list = [5,10,15,20];
-%     else
-%     end 
-%     
-%     for subject = subject_list
-% %       pre_ChannelSelection(trigger_list, subject, config);  
-%         pre_ChannelSelection_newSubject(trigger_list, subject, config);   %adapted for newly aquired subjects
-%     end
-% end
+ %% Channel selection (temporal channels).
+ % Channel selection runs independently for each subject, but is obtained
+ % from the average signals of all the trigger conditions.
+
+ if setup.channel_selection == 1
+     config.channel_modality = 'temporal';   % 'temporal', 'occipital', 'auto'
+     config.plot_channels = 1;               % In this case, it would plot topography using temporal information.
+     config.store_data = 1;
+     config.DSS = 1;
+    averageTrig = 1;     %1: we average the information of all triggers for channel selection
+                          %0: we average the information of each pair of
+                          %triggers
+     if averageTrig
+        trigger_list = [5,10,15,20];
+     else
+     end 
+     
+     for subject = subject_list
+ %       pre_ChannelSelection(trigger_list, subject, config);  
+         pre_ChannelSelection_newSubject(trigger_list, subject, config);   %adapted for newly aquired subjects
+     end
+ end
 
 
 % DSS analysis
@@ -143,38 +144,38 @@ if setup.preprocessingMEM == 1
  end 
 
 
-% %% Butter fly plotting for tone 
-% if setup.compute_ToneButterfly == 1
-% 
-%     config.reject_visual        = 0; % Set to 1 to reject trials visually. Use 0 otherwise.
-%     config.store_data           = 1; % Set to 1 to store the data in a .mat file. Use 0 otherwise (useful for testing purposes).
-%     config.load_channels        = 1;
-%     config.DSS                  = 0; %0: analyse the raw data; 1: analyse the DSS data
-%     config.nicolas_procedure    = nicolas_procedure;
-% %     newSubject                  = 0; % set to 1 we analyse new subjects
-% %     oldSubject                  = 0; % set to 1 we analyse old subjects
-%     config.temporal_frame   = [8,14]; % We determine the temporal frame in seconds that we want to process. dafult [8,14]
-% %     config.temporal_frame   = [0, 2.5]; % We determine the temporal frame in seconds that we want to process.
-%     config.baseline         = 'tone'; % 'tone', 'silence', 'activity'
-%     config.firstCycle       = 1; % Analyse the response of first cycle
-%     
-% %     if newSubject
-% %         
-% %     post_ToneButterfly_newSubject(trigger_list, subject_list, config);
-% %     
-% %     elseif oldSubject
-% %         
-% %     config.channels_path  = fullfile('..','Results_Antonio_S1_S15','Channels_DSS');  % channels selected based on the data after proprocessing     
-% %     subject_list = [2 3 4 5 6 7 8 9 10 11 12 13 15];       
-% %     post_ToneButterfly_oldSubject(trigger_list, subject_list, config);
-% %     
-% %     else
-%         
-% %     subject_list = [2 3 4 5 6 7 8 9 10 11 12 13 15 16 17 18 19 20 21 22 23 24];  
-%     post_ToneButterfly_allSubject(trigger_list, subject_list, config);
-% %   post_ToneButterfly(trigger_list, subject_list, config);
-% %     end     
-% end
+%% Butter fly plotting for tone 
+ if setup.compute_ToneButterfly == 1
+ 
+     config.reject_visual        = 0; % Set to 1 to reject trials visually. Use 0 otherwise.
+     config.store_data           = 1; % Set to 1 to store the data in a .mat file. Use 0 otherwise (useful for testing purposes).
+     config.load_channels        = 1;
+     config.DSS                  = 0; %0: analyse the raw data; 1: analyse the DSS data
+     config.nicolas_procedure    = nicolas_procedure;
+ %    newSubject                  = 0; % set to 1 we analyse new subjects
+      oldSubject                  = 0; % set to 1 we analyse old subjects
+     config.temporal_frame   = [8,14]; % We determine the temporal frame in seconds that we want to process. dafult [8,14]
+      config.temporal_frame   = [0, 2.5]; % We determine the temporal frame in seconds that we want to process.
+     config.baseline         = 'tone'; % 'tone', 'silence', 'activity'
+     config.firstCycle       = 1; % Analyse the response of first cycle
+     
+ %     if newSubject
+ %         
+ %     post_ToneButterfly_newSubject(trigger_list, subject_list, config);
+ %     
+ %     elseif oldSubject
+ %         
+ %     config.channels_path  = fullfile('..','Results_Antonio_S1_S15','Channels_DSS');  % channels selected based on the data after proprocessing     
+ %     subject_list = [2 3 4 5 6 7 8 9 10 11 12 13 15];       
+ %     post_ToneButterfly_oldSubject(trigger_list, subject_list, config);
+ %     
+ %     else
+         
+ %     subject_list = [2 3 4 5 6 7 8 9 10 11 12 13 15 16 17 18 19 20 21 22 23 24];  
+     post_ToneButterfly_allSubject(trigger_list, subject_list, config);
+ %   post_ToneButterfly(trigger_list, subject_list, config);
+ %     end     
+ end
 
 
 %% PSD estimation for and individual subject and condition (trigger).
